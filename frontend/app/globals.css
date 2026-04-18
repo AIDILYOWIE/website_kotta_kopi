@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Ondo Regular
+   Place Ondo-Regular.woff2 (and .woff / .ttf) inside /public/fonts/
+   Cormorant Garamond (Google Fonts) loads as the visible fallback.
+   ───────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Ondo";
+  src: url("../public/fonts/Ondo-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── CSS Custom Properties ─────────────────────────────────────────────── */
+:root {
+  --kotta-red: #8f3133;
+  --kotta-dark-red: #6b2426;
+  --kotta-light-red: #b85558;
+  --kotta-cream: #fbf4f2;
+  --kotta-black: #0d0d0d;
+  --kotta-gray: #8c8c8c;
+  --kotta-gold: #d4a017;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-color: var(--kotta-cream);
+    color: var(--kotta-black);
+    font-family: var(--font-body), "Plus Jakarta Sans", system-ui, sans-serif;
+  }
+
+  /* Grain overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    background-repeat: repeat;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--kotta-cream);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--kotta-red);
+    border-radius: 2px;
+  }
+}
+
+/* ── Components ───────────────────────────────────────────────────────── */
+@layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply flex rounded-[18px] items-center justify-center gap-2 bg-kotta-red text-kotta-cream
+           px-8 py-4 text-xs tracking-[0.2em] uppercase font-body font-medium
+           transition-all duration-300 hover:bg-kotta-dark-red
+           focus:outline-none focus:ring-2 focus:ring-kotta-red;
+  }
+  .btn-light {
+    @apply flex rounded-[18px] items-center justify-center gap-2 bg-kotta-cream text-kotta-red
+           px-8 py-4 text-xs tracking-[0.2em] uppercase font-body font-medium border border-kotta-cream
+           transition-all duration-300 hover:bg-transparent hover:text-kotta-cream hover:text-shadow-lg
+           focus:outline-none focus:ring-2 focus:ring-kotta-red;
+  }
+  .btn-primary-sm {
+    @apply flex rounded-[18px] items-center justify-center gap-2 bg-kotta-red text-kotta-cream
+           px-5 py-2.5 text-xs tracking-[0.18em] uppercase font-body font-medium
+           transition-all duration-300 hover:bg-kotta-dark-red;
+  }
+  .btn-outline-light {
+    @apply flex rounded-[18px] items-center justify-center gap-2 border border-kotta-cream/40 text-kotta-cream
+           px-8 py-4 text-xs tracking-[0.2em] uppercase font-body font-medium
+           transition-all duration-300 hover:border-kotta-cream hover:bg-kotta-cream/10;
+  }
+  .btn-outline-dark {
+    @apply flex rounded-[18px] items-center justify-center gap-2 border border-kotta-black/30 text-kotta-black
+           px-8 py-4 text-xs tracking-[0.2em] uppercase font-body font-medium
+           transition-all duration-300 hover:border-kotta-red hover:text-kotta-red;
+  }
+
+  /* Section label (small caps eyebrow) */
+  .section-label {
+    @apply text-[10px] tracking-[0.45em] uppercase font-body font-medium rounded-[18px];
+  }
+
+  /* Ornamental center rule  */
+  .ornament {
+    @apply flex items-center gap-4;
+  }
+  .ornament::before,
+  .ornament::after {
+    @apply content-[''] flex-1 h-px;
+    background: currentColor;
+    opacity: 0.2;
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    @apply opacity-0 translate-y-8 transition-all duration-700 ease-out;
+  }
+  .reveal.visible {
+    @apply opacity-100 translate-y-0;
+  }
+  .reveal-left {
+    @apply opacity-0 -translate-x-8 transition-all duration-700 ease-out;
+  }
+  .reveal-left.visible {
+    @apply opacity-100 translate-x-0;
+  }
+  .reveal-right {
+    @apply opacity-0 translate-x-8 transition-all duration-700 ease-out;
+  }
+  .reveal-right.visible {
+    @apply opacity-100 translate-x-0;
+  }
+
+  /* Card */
+  .card-classic {
+    @apply bg-kotta-cream border border-kotta-mist
+           transition-all duration-400 hover:-translate-y-1 hover:shadow-lg;
+  }
+}
+
+/* ── Utilities ───────────────────────────────────────────────────────── */
+@layer utilities {
+  .text-shadow-sm {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  .text-shadow-md {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  .text-shadow-lg {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+  }
+  .text-shadow-none {
+    text-shadow: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Stagger delays */
+  .delay-100 {
+    transition-delay: 100ms;
+    animation-delay: 100ms;
+  }
+  .delay-200 {
+    transition-delay: 200ms;
+    animation-delay: 200ms;
+  }
+  .delay-300 {
+    transition-delay: 300ms;
+    animation-delay: 300ms;
+  }
+  .delay-400 {
+    transition-delay: 400ms;
+    animation-delay: 400ms;
+  }
+  .delay-500 {
+    transition-delay: 500ms;
+    animation-delay: 500ms;
+  }
+  .delay-700 {
+    transition-delay: 700ms;
+    animation-delay: 700ms;
+  }
+}
+
+/* ── Hero Entrance Animation ─────────────────────────────────────────── */
+
+/* Full-size hero image — clip-path starts as a centered square,
+   then expands to fill the entire card.
+   The image never moves or rescales; only the reveal window grows.       */
+.hero-img-expand {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-size: cover;
+  background-position: center;
+  will-change: clip-path;
+}
+
+/* Dark gradient — fades in alongside the expanding image */
+.hero-img-gradient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom,
+      rgba(13,13,13,0.55) 0%,
+      rgba(13,13,13,0.35) 40%,
+      rgba(13,13,13,0.60) 100%);
+}
+
+/* Hero section base */
+#beranda {
+  position: relative;
+}
