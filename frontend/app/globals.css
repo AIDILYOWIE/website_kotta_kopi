@@ -12,6 +12,18 @@
   }
 }
 
+/* ── Hero entrance keyframes ───────────────────────────────────────────────
+   CSS animations (not JS-state) so they start counting from page-paint,
+   not from React hydration — critical for reliable playback on mobile.     */
+@keyframes hero-fade-in  { to { opacity: 1; } }
+@keyframes hero-slide-up { to { transform: translateY(0); } }
+@keyframes hero-rise-in  { to { opacity: 1; transform: translateY(0); } }
+
+@keyframes loader-wave {
+  0%, 55%, 100% { transform: translateY(0); }
+  28%           { transform: translateY(-6px); }
+}
+
 /* ─────────────────────────────────────────────────────────────────────────
    Ondo Regular
    Place Ondo-Regular.woff2 (and .woff / .ttf) inside /public/fonts/

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
+import LoadingScreen from '@/app/components/LoadingScreen'
 
 /* ── Fonts ───────────────────────────────────────────────────────────── */
 // Cormorant Garamond = visual stand-in while Ondo font files are added to /public/fonts/
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="id" className={`${cormorant.variable} ${jakarta.variable}`}>
       <body className="font-body antialiased">
+        <LoadingScreen />
         {children}
       </body>
     </html>
