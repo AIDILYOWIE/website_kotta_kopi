@@ -83,7 +83,7 @@ export default function Navbar() {
           <Link href="/" onClick={close} className="flex items-center gap-3 group shrink-0">
             {/* Ornamental mark */}
             <span
-              className={`w-full border flex items-center justify-center transition-colors duration-300`}
+              className={`w-full flex items-center justify-center transition-colors duration-300`}
             >
               <img src={logo.src} alt='logo' width={48} height={48} />
             </span>

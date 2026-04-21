@@ -134,8 +134,8 @@ export default function MenuBanner() {
 
           {/* Heading */}
           <h2
-            className="font-display text-[1.65rem] md:text-4xl lg:text-[3.5rem]
-                       text-kotta-black leading-[1.15] mb-5"
+            className="font-display text-[1.65rem] md:text-4xl lg:text-5xl
+                       text-kotta-black leading-[1.15] md:leading-normal lg:leading-snug mb-5"
           >
             {slide.heading.map((line, li) => (
               <span

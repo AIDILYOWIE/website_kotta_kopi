@@ -57,7 +57,7 @@ export default function OrderBand() {
           trigger: wrapperRef.current,
           start:   'top bottom',
           end:     'bottom top',
-          scrub:   1.5,
+          scrub:   0.8,
         },
       })
     }, wrapperRef)
