@@ -7,28 +7,28 @@ const slides = [
   {
     eyebrow: 'Non-Kopi',
     heading: ['Matcha dengan rasa', 'lebih bold, lebih rich,', 'dan penuh karakter'],
-    accent:  [false, true, false],
-    price:   'Rp 26.000',
-    badge:   'Favorit',
-    image:   '/images/menu/menu_change.png',
+    accent: [false, true, false],
+    price: 'Rp 26.000',
+    badge: 'Favorit',
+    image: '/images/menu/menu_change.png',
     imgWidth: 'clamp(200px, 34%, 420px)',
   },
   {
     eyebrow: 'Makanan',
     heading: ['Croissant renyah di luar,', 'lembut di dalam —', 'dibuat segar setiap hari'],
-    accent:  [false, true, false],
-    price:   'Rp 22.000',
-    badge:   'Segar',
-    image:   '/images/menu/croissant.png',
+    accent: [false, true, false],
+    price: 'Rp 22.000',
+    badge: 'Segar',
+    image: '/images/menu/croissant.png',
     imgWidth: 'clamp(180px, 30%, 380px)',
   },
   {
     eyebrow: 'Menu Lengkap',
     heading: ['Dari espresso hingga matcha', '— semua ada,', 'semua untuk kamu'],
-    accent:  [false, true, false],
-    price:   'Mulai Rp 18.000',
-    badge:   '25+ Pilihan',
-    image:   '/images/content_banner.png',
+    accent: [false, true, false],
+    price: 'Mulai Rp 18.000',
+    badge: '25+ Pilihan',
+    image: '/images/content_banner.png',
     imgWidth: 'clamp(240px, 40%, 480px)',
   },
 ]
@@ -39,14 +39,16 @@ const TOTAL = slides.length
 const ease = (x: number) => 1 - Math.pow(1 - Math.min(Math.max(x, 0), 1), 3)
 
 export default function MenuBanner() {
-  const [current,  setCurrent]  = useState(0)
+  const [current, setCurrent] = useState(0)
   /* 'idle'  → content at rest
      'out'   → content animating away (left → left, right → right)
      After 'out' settles: swap current, jump new content to start position,
      then on next paint transition back to 'idle' (= animate in).           */
-  const [phase,    setPhase]    = useState<'idle' | 'out'>('idle')
-  const [locked,   setLocked]   = useState(false)
+  const [phase, setPhase] = useState<'idle' | 'out'>('idle')
+  const [locked, setLocked] = useState(false)
   const touchStart = useRef(0)
+  const mouseStart = useRef(0)
+  const isDragging = useRef(false)
 
   const goTo = useCallback((next: number) => {
     if (locked) return
@@ -71,14 +73,14 @@ export default function MenuBanner() {
   const slide = slides[current]
 
   /* ── Directional translate amounts ─────────────────────────────────────── */
-  const OUT_LEFT  = '-80px'   /* left panel exits/enters from the left  */
+  const OUT_LEFT = '-80px'   /* left panel exits/enters from the left  */
   const OUT_RIGHT = '80px'    /* right panel exits/enters from the right */
-  const DURATION  = '0.4s'
+  const DURATION = '0.4s'
 
   /* Left text block — slides left on exit, slides in from left on enter */
   const leftStyle: React.CSSProperties = {
-    opacity:    phase === 'idle' ? 1 : 0,
-    transform:  phase === 'idle' ? 'translateX(0)' : `translateX(${OUT_LEFT})`,
+    opacity: phase === 'idle' ? 1 : 0,
+    transform: phase === 'idle' ? 'translateX(0)' : `translateX(${OUT_LEFT})`,
     transition: `opacity ${DURATION} ease, transform ${DURATION} ease`,
     willChange: 'transform, opacity',
   }
@@ -87,8 +89,8 @@ export default function MenuBanner() {
      translateY(-50%) is merged here (not a Tailwind class) so it isn't
      overwritten by the inline transform on the same element.             */
   const rightStyle: React.CSSProperties = {
-    opacity:    phase === 'idle' ? 1 : 0,
-    transform:  phase === 'idle'
+    opacity: phase === 'idle' ? 1 : 0,
+    transform: phase === 'idle'
       ? 'translateX(0) translateY(-50%)'
       : `translateX(${OUT_RIGHT}) translateY(-50%)`,
     transition: `opacity ${DURATION} ease 0.04s, transform ${DURATION} ease 0.04s`,
@@ -100,14 +102,29 @@ export default function MenuBanner() {
       className="relative w-full overflow-hidden
                  min-h-[280px] md:min-h-[480px] lg:min-h-[520px]"
       style={{
-        backgroundImage:    'url(/images/background_banner.png)',
-        backgroundSize:     'cover',
+        backgroundImage: 'url(/images/background_banner.png)',
+        backgroundSize: 'cover',
         backgroundPosition: 'center',
+        cursor: 'grab',
+        userSelect: 'none',
       }}
       onTouchStart={e => { touchStart.current = e.changedTouches[0].clientX }}
       onTouchEnd={e => {
         const diff = touchStart.current - e.changedTouches[0].clientX
         if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1)
+      }}
+      onMouseDown={e => {
+        mouseStart.current = e.clientX
+        isDragging.current = true
+      }}
+      onMouseUp={e => {
+        if (!isDragging.current) return
+        isDragging.current = false
+        const diff = mouseStart.current - e.clientX
+        if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1)
+      }}
+      onMouseLeave={() => {
+        isDragging.current = false
       }}
     >
       {/* ── Inner layout ───────────────────────────────────────────────── */}
@@ -135,7 +152,7 @@ export default function MenuBanner() {
           {/* Heading */}
           <h2
             className="font-display text-[1.65rem] md:text-4xl lg:text-5xl
-                       text-kotta-black leading-[1.15] md:leading-normal lg:leading-snug mb-5"
+                       text-kotta-black leading-[1.15] md:leading-normal lg:leading-[1.15`] mb-5"
           >
             {slide.heading.map((line, li) => (
               <span
@@ -186,7 +203,7 @@ export default function MenuBanner() {
             key={i}
             className="h-[2px] rounded-full transition-all duration-300"
             style={{
-              width:      i === current ? '24px' : '6px',
+              width: i === current ? '24px' : '6px',
               background: i === current
                 ? 'var(--kotta-red)'
                 : 'rgba(13,13,13,0.22)',
