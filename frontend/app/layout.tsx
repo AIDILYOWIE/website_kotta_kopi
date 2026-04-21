@@ -32,6 +32,10 @@ export const metadata: Metadata = {
     type:        'website',
     locale:      'id_ID',
   },
+  icons: {
+    icon:  '/images/logo/logo.jpg',
+    apple: '/images/logo/logo.jpg',
+  },
   other: {
     'geo.region':    'ID-JI',
     'geo.placename': 'Ponorogo, Jawa Timur',
